@@ -7,6 +7,8 @@ Foundation is the most advanced responsive front-end framework in the world. You
 
 To get started, check out <http://foundation.zurb.com/docs>
 
+**This is a fork that uses Alumni and Development branding.**
+
 
 ## Quickstart
 
