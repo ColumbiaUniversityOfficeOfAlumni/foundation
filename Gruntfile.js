@@ -8,7 +8,8 @@ module.exports = function(grunt) {
 
     foundation: {
       js: ['js/foundation/foundation.js', 'js/foundation/foundation.*.js'],
-      scss: ['scss/foundation.scss']
+      scss: ['scss/foundation.scss','scss/settings.scss']
+
     },
 
     jst: {
@@ -50,8 +51,8 @@ module.exports = function(grunt) {
     sass: {
       dist: {
         options: {
-          includePaths: ['scss'],
-          sourceMap: true
+          loadPath: [__dirname + '/scss'],
+          bundleExec: true
         },
         files: {
           'dist/assets/css/foundation.css': '<%= foundation.scss %>',
@@ -61,10 +62,29 @@ module.exports = function(grunt) {
       }
     },
 
+    'string-replace': {
+      dist: {
+        files: {
+          'dist/assets/':'dist/assets/bower.json',
+          'dist/assets/css/':'dist/assets/css/*.css',
+          'dist/assets/js/':'dist/assets/js/*js',
+          'dist/assets/js/foundation/':'dist/assets/js/foundation/*js',
+          'dist/assets/scss/foundation/components/':'dist/assets/scss/foundation/components/*.scss',
+          'dist/docs/assets/css/':'dist/docs/assets/css/*.css',
+          'dist/docs/assets/js/':'dist/docs/assets/js/*.js'
+        },
+        options: {
+          replacements: [
+            {pattern: /{{\s*VERSION\s*}}/g, replacement: '<%= pkg.version %>'}
+          ]
+        }
+      }
+    },
+
     concat: {
       dist: {
         files: {
-          'dist/assets/js/foundation.js': '<%= foundation.js %>'
+          'dist/assets/js/foundation.js':'<%= foundation.js %>'
         }
       }
     },
@@ -77,7 +97,7 @@ module.exports = function(grunt) {
         files: {
           'dist/assets/js/foundation.min.js': ['<%= foundation.js %>'],
           'dist/docs/assets/js/modernizr.js': ['<%= vendor %>/modernizr/modernizr.js'],
-          'dist/docs/assets/js/all.js': ['<%= vendor %>/jquery/dist/jquery.js', 'vendor/lodash/dist/lodash.min.js','<%= vendor %>/fastclick/lib/fastclick.js', '<%= vendor %>/jquery-placeholder/jquery.placeholder.js', '<%= vendor %>/jquery.autocomplete/dist/jquery.autocomplete.js', '<%= foundation.js %>', 'doc/assets/js/docs.js']
+          'dist/docs/assets/js/all.js': ['<%= vendor %>/jquery/dist/jquery.js', '<%= vendor %>/lodash/dist/lodash.min.js','<%= vendor %>/fastclick/lib/fastclick.js', '<%= vendor %>/jquery-placeholder/jquery.placeholder.js', '<%= vendor %>/jquery.autocomplete/dist/jquery.autocomplete.js', '<%= foundation.js %>', 'doc/assets/js/docs.js']
         }
       },
       vendor: {
@@ -213,14 +233,15 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-sass');
   grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-newer');
   grunt.loadNpmTasks('grunt-rsync');
-  grunt.loadNpmTasks('grunt-sass');
   grunt.loadNpmTasks('grunt-contrib-jst');
-  
+  grunt.loadNpmTasks('grunt-string-replace');
+
   grunt.task.registerTask('watch_start', ['karma:dev_watch:start', 'watch']);
-  grunt.registerTask('build:assets', ['clean', 'sass', 'concat', 'uglify', 'copy', 'jst']);
+  grunt.registerTask('build:assets', ['clean', 'sass', 'concat', 'uglify', 'copy', 'jst', 'string-replace']);
   grunt.registerTask('build', ['build:assets', 'assemble']);
   grunt.registerTask('travis', ['build', 'karma:continuous']);
   grunt.registerTask('develop', ['travis', 'watch_start']);
