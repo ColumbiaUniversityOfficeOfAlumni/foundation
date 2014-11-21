@@ -134,7 +134,7 @@ $base-line-height: 150% !default;
       }
       @else {
         top: 50%;
-        margin-top: -$width/2;
+        margin-top: (-$width/2);
       }
     	@if $left {
     	  left: $left;
@@ -150,14 +150,14 @@ $base-line-height: 150% !default;
     }
 
     box-shadow:
-      0 0px 0 $thickness $color,
+      0 0 0 $thickness $color,
       0 $gap + $thickness 0 $thickness $color,
       0 (2 * $gap + 2*$thickness) 0 $thickness $color;
     width: $width;
   }
   span:hover:after {
     box-shadow:
-      0 0px 0 $thickness $hover-color,
+      0 0 0 $thickness $hover-color,
       0 $gap + $thickness 0 $thickness $hover-color,
       0 (2 * $gap + 2*$thickness) 0 $thickness $hover-color;
   }
@@ -266,7 +266,7 @@ $include-html-global-classes: $include-html-classes !default;
 $column-gutter: rem-calc(30) !default;
 
 // Media Query Ranges
-$small-range: (0em, 40em) !default;
+$small-range: (0, 40em) !default;
 $medium-range: (40.063em, 64em) !default;
 $large-range: (64.063em, 90em) !default;
 $xlarge-range: (90.063em, 120em) !default;
